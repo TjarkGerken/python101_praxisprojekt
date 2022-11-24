@@ -10,7 +10,7 @@ class ETL:
     def __init__(self, fp):
         self.__filepath = fp
         self.__input_df = {"sales_codes": pd.DataFrame(), "vehicle_hash": pd.DataFrame()}
-        self.return_df = None
+        self.df_return = None
 
     def run(self):
         self.__load()
@@ -18,6 +18,7 @@ class ETL:
         self.__merge()
         self.__filter()
         self.__attach_engines()
+        self.__save()
 
     def __load(self):
         self.__input_df = DataLoader(self.__filepath).load()
@@ -35,17 +36,17 @@ class ETL:
 
     def __merge(self):
         merged = self.__input_df["sales_codes"].merge(right=self.__input_df["vehicle_hash"], on="h_vehicle_hash")
-        self.return_df = merged.drop(columns=["h_vehicle_hash", "Unnamed: 0"])
+        self.df_return = merged.drop(columns=["h_vehicle_hash", "Unnamed: 0"])
 
     def __filter(self):
-        self.return_df["production_date"] = pd.to_datetime(self.return_df["production_date"],
+        self.df_return["production_date"] = pd.to_datetime(self.df_return["production_date"],
                                                            format="%Y-%m-%d %H:%M:%S",
                                                            errors="coerce").dropna()
-        self.return_df = self.return_df[
-            np.logical_and(self.return_df["production_date"] > dt.datetime(year=2010, day=1, month=1),
-                           dt.datetime.now() > self.return_df["production_date"])]
-        self.return_df = self.return_df.dropna()
-        self.return_df = self.return_df[self.return_df["fin"].str.len() == 17]
+        self.df_return = self.df_return[
+            np.logical_and(self.df_return["production_date"] > dt.datetime(year=2010, day=1, month=1),
+                           dt.datetime.now() > self.df_return["production_date"])]
+        self.df_return = self.df_return.dropna()
+        self.df_return = self.df_return[self.df_return["fin"].str.len() == 17]
 
     def __attach_engines(self):
         def check(entry):
@@ -54,4 +55,8 @@ class ETL:
                     return engines["Code Description En"][key]
 
         engines = self.__input_df["engines"].loc[:, "Sales Code":"Code Description En"].to_dict()
-        self.return_df["engine"] = [check(entry) for entry in self.return_df["sales_code_array"]]
+        self.df_return["engine"] = [check(entry) for entry in self.df_return["sales_code_array"]]
+
+    def __save(self):
+        fp = "./data/enhanced_vehicle_data.xlsx"
+        self.df_return.to_excel(fp)
