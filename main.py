@@ -5,4 +5,5 @@ etl = ETL(
     "/vehicle_data.xlsx")
 
 etl.run()
-print(etl.df.head())
+
+print(etl.return_df.head(10))
