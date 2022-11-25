@@ -3,7 +3,7 @@ from classes.classETL import ETL
 
 wiessler_fp = "C:\\Users\\user\\Dropbox\\DHBW Stuttgart\\Informatik 1 Python\\Projektarbeit_Wiessler\\vehicle_data.xlsx"
 tjark_fp = "./data/vehicle_data.xlsx"
-etl = ETL(fp=tjark_fp)
+etl = ETL(fp=wiessler_fp)
 etl.run()
 
 query1 = Analyse(dataframe=etl.df_return, start_date="01.01.2014", end_date="31.12.2020", file_save_path="./plots/",
