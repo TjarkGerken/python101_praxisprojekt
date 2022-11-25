@@ -8,5 +8,5 @@ class DataLoader:
         self.__sheet_names = ["sales_codes", "vehicle_hash", "engines"]
 
     def load(self) -> dict[str, pd.DataFrame]:
-        self.dictionary_of_dataframes = pd.read_excel(self.__filepath, sheet_name=self.__sheet_names)
-        return self.dictionary_of_dataframes
+        self.__dictionary_of_dataframes = pd.read_excel(self.__filepath, sheet_name=self.__sheet_names)
+        return self.__dictionary_of_dataframes
