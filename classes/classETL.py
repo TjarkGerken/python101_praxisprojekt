@@ -50,11 +50,11 @@ class ETL:
 
     def __attach_engines(self):
         def check(entry):
-            for key, value in engines["Sales Code"].items():
+            for key, value in dictionary_engines_codes["Sales Code"].items():
                 if value in entry:
-                    return engines["Code Description En"][key]
+                    return dictionary_engines_codes["Code Description En"][key]
 
-        engines = self.__input_df["engines"].loc[:, "Sales Code":"Code Description En"].to_dict()
+        dictionary_engines_codes = self.__input_df["engines"].loc[:, "Sales Code":"Code Description En"].to_dict()
         self.df_return["engine"] = [check(entry) for entry in self.df_return["sales_code_array"]]
 
     def __save(self):
