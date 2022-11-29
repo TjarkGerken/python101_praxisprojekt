@@ -59,4 +59,4 @@ class ETL:
 
     def __save(self):
         fp = "./data/enhanced_vehicle_data.xlsx"
-        self.df_return.to_excel(fp)
+        self.df_return[["production_date", "country", "sales_code_array", "fin"]].to_excel(fp)
