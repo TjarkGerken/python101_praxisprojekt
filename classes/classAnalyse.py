@@ -48,14 +48,14 @@ class Analyse:
               f"Second most Sales in:  {self.__top_three_countries()[1]}\n"
               f"Third most Sales in:  {self.__top_three_countries()[2]}\n")
         print("-------------------------------\n")
-        print(f"The most vehicles were sold in {self.__grouped_by_year()}\n")
+        print(f"The most vehicles were sold in {self.grouped_by_year()}\n")
         print("-------------------------------\n")
 
     def query2(self) -> None:
         print(f"In the specified timeframe {self.sales_by_engine} vehicles were sold with the specified engines.\n")
         print("-------------------------------\n")
         print(f"The car that was sold to New Zealand in the specified timeframe with the OM 936 Motor has the VIN:")
-        print(f"{self.filter_by_country_engine('Neuseeland', 'OM 936')} \n")
+        print(f"{self.__filter_by_country_engine('Neuseeland', 'OM 936')} \n")
         print("-------------------------------\n")
 
     def query3(self) -> None:
@@ -76,7 +76,7 @@ class Analyse:
         plt.savefig(self.save_path + "top_three_countries.png")
         return list(sales_grouped_by_year["fin"].index[0:3])
 
-    def __grouped_by_year(self) -> pd.DataFrame:
+    def grouped_by_year(self) -> pd.DataFrame:
         self.df_timeframe_adjusted.loc[:, "year"] = pd.DatetimeIndex(
             self.df_timeframe_adjusted.loc[:, "production_date"]).year
         df_grouped_by_year = self.df_timeframe_adjusted.groupby(by="year").count()
@@ -107,7 +107,7 @@ class Analyse:
         first_vin = self.df_timeframe_adjusted.iloc[0, :]["fin"]
         return first_vin
 
-    def filter_by_country_engine(self, country, engine) -> str:
+    def __filter_by_country_engine(self, country, engine) -> str:
         filtered = self.df_timeframe_adjusted[np.logical_and(self.df_timeframe_adjusted["country"] == country,
                                                              self.df_timeframe_adjusted["engine"] == engine)]
         return filtered["fin"].item()

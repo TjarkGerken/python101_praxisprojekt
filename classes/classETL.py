@@ -45,8 +45,8 @@ class ETL:
         self.df_return = self.df_return[
             np.logical_and(self.df_return["production_date"] > dt.datetime(year=2010, day=1, month=1),
                            dt.datetime.now() > self.df_return["production_date"])]
-        self.df_return = self.df_return.dropna()
         self.df_return = self.df_return[self.df_return["fin"].str.len() == 17]
+        self.df_return = self.df_return.dropna()
 
     def __attach_engines(self):
         def check(entry):
