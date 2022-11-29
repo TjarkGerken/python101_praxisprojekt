@@ -1,7 +1,6 @@
 # Programming Challenge
 
-In this repository is my solution to the programming challenge in the course "Einführung in die Programmierung".
-The Task can be found below in German.
+In this repository you will find my solution to the programming task that was completed in the course "Introduction to Programming" as part of the study of Business Informatics at DHBW Lörrach. The Task can be found below in German.
 
 ## Beschreibung
 
