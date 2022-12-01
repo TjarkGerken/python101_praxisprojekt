@@ -25,7 +25,7 @@ class ETL:
 
     def __drop(self):
         self.__input_df["sales_codes"].drop(columns="Unnamed: 0", inplace=True)
-        self.__input_df["vehicle_hash"].drop(columns=["record_source", "load_ts"], inplace=True)
+        self.__input_df["vehicle_hash"].drop(columns=["record_source", "load_ts", "Unnamed: 0"], inplace=True)
         self.__input_df["engines"].drop(columns=["Code Group Name En ",
                                                  "Code Group Id",
                                                  "Code Group Name De ",
@@ -36,7 +36,7 @@ class ETL:
 
     def __merge(self):
         merged = self.__input_df["sales_codes"].merge(right=self.__input_df["vehicle_hash"], on="h_vehicle_hash")
-        self.df_return = merged.drop(columns=["h_vehicle_hash", "Unnamed: 0"])
+        self.df_return = merged.drop(columns=["h_vehicle_hash"])
 
     def __filter(self):
         self.df_return["production_date"] = pd.to_datetime(self.df_return["production_date"],
