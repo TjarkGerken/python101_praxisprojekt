@@ -20,7 +20,7 @@ class ETL:
         self.__save()
 
     def __load(self):
-        self.__input_df = DataLoader(self.__filepath).load()
+        self.__input_df = DataLoader(self.__filepath, ["sales_codes", "vehicle_hash", "engines"]).load()
 
     def __drop(self):
         self.__input_df["sales_codes"].drop(columns="Unnamed: 0", inplace=True)
@@ -64,7 +64,7 @@ class ETL:
                 if value in entry:
                     return dictionary_engines_codes["Code Description En"][key]
 
-        dictionary_engines_codes = self.__input_df["engines"].loc[:, "Sales Code":"Code Description En"].to_dict()
+        dictionary_engines_codes = self.__input_df["engines"].loc[3:7, "Sales Code":"Code Description En"].to_dict()
         self.df_return["engine"] = [check(entry) for entry in self.df_return["sales_code_array"]]
 
     def __save(self):

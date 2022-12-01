@@ -99,6 +99,7 @@ class Analyse:
         plt.ylabel("# of Sales")
         plt.legend().set_visible(False)
         plt.xticks(rotation=360)
+        plt.ylim([0, 30])
         plt.savefig(self.save_path + "sales_by_engines_filtered.png")
         return counted_filtered["fin"].sum()
 
