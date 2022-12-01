@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 import pandas as pd
 
 from functions.functions import df_slice_timeframe
@@ -15,7 +14,7 @@ class Analyse:
 
         self.start_date = start_date
         self.end_date = end_date
-        if np.logical_or(self.start_date is None, self.end_date is None):
+        if not self.start_date or not self.end_date:
             self.df_timeframe_adjusted = dataframe.sort_values(by="production_date")
         else:
             self.df_timeframe_adjusted = df_slice_timeframe(dataframe, self.start_date, self.end_date).sort_values(
@@ -108,6 +107,6 @@ class Analyse:
         return first_vin
 
     def __filter_by_country_engine(self, country, engine) -> str:
-        filtered = self.df_timeframe_adjusted[np.logical_and(self.df_timeframe_adjusted["country"] == country,
-                                                             self.df_timeframe_adjusted["engine"] == engine)]
+        filtered = self.df_timeframe_adjusted.loc[(self.df_timeframe_adjusted["country"] == country) &
+                                                  (self.df_timeframe_adjusted["engine"] == engine)]
         return filtered["fin"].item()
