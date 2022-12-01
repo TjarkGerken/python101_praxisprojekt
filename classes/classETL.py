@@ -16,7 +16,7 @@ class ETL:
         self.__drop()
         self.__merge()
         self.__filter()
-        self.__attach_engines()
+        self.__attach_engines_my_solution()
         self.__save()
 
     def __load(self):
@@ -69,4 +69,4 @@ class ETL:
 
     def __save(self):
         fp = "./data/enhanced_vehicle_data.xlsx"
-        self.df_return[["production_date", "country", "sales_code_array", "fin"]].to_excel(fp)
+        self.df_return[["production_date", "country", "sales_code_array", "fin", "engine"]].to_excel(fp)

@@ -20,8 +20,8 @@ class Analyse:
             self.df_timeframe_adjusted = df_slice_timeframe(dataframe, self.start_date, self.end_date).sort_values(
                 by="production_date")
 
-        self.sales_by_engine = self.filter_by_engines(["OM 934", "OM 936", "OM 470", "OM 471"])
-        plt.rcParams["figure.figsize"] = [8, 5]
+        self.sales_by_engine = None
+        plt.rcParams["figure.figsize"] = [9, 5]
         plt.rcParams['figure.dpi'] = 300
 
     def dashboard(self) -> None:
@@ -51,6 +51,7 @@ class Analyse:
         print("-------------------------------\n")
 
     def query2(self) -> None:
+        self.sales_by_engine = self.filter_by_engines(["OM 934", "OM 936", "OM 470", "OM 471"])
         print(f"In the specified timeframe {self.sales_by_engine} vehicles were sold with the specified engines.\n")
         print("-------------------------------\n")
         print(f"The car that was sold to New Zealand in the specified timeframe with the OM 936 Motor has the VIN:")
@@ -92,9 +93,8 @@ class Analyse:
     def filter_by_engines(self, list_of_engines) -> pd.DataFrame:
         counted = self.df_timeframe_adjusted.groupby(by="engine").count()
         counted_filtered = counted.filter(items=list_of_engines, axis=0)
-
         counted_filtered.plot(use_index=True, y=["fin"], kind="bar", color="silver")
-        plt.title(f"Sales by Engine. Filtered for: {list_of_engines}")
+        plt.title(f"Sales by Engine. Filtered for: {list_of_engines} {self.start_date} and {self.end_date}")
         plt.xlabel("Engine Name")
         plt.ylabel("# of Sales")
         plt.legend().set_visible(False)
