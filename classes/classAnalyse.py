@@ -11,9 +11,9 @@ class Analyse:
                  end_date: str = None) -> None:
         self.save_path = file_save_path
         self.query = query
-
         self.start_date = start_date
         self.end_date = end_date
+
         if not self.start_date or not self.end_date:
             self.df_timeframe_adjusted = dataframe.sort_values(by="production_date")
         else:
