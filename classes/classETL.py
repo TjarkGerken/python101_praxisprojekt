@@ -58,6 +58,15 @@ class ETL:
             engine_column.append(engine)
         self.df_return["engine"] = engine_column
 
+    def __attach_engines_my_solution(self):
+        def check(entry):
+            for key, value in dictionary_engines_codes["Sales Code"].items():
+                if value in entry:
+                    return dictionary_engines_codes["Code Description En"][key]
+
+        dictionary_engines_codes = self.__input_df["engines"].loc[:, "Sales Code":"Code Description En"].to_dict()
+        self.df_return["engine"] = [check(entry) for entry in self.df_return["sales_code_array"]]
+
     def __save(self):
         fp = "./data/enhanced_vehicle_data.xlsx"
         self.df_return[["production_date", "country", "sales_code_array", "fin"]].to_excel(fp)
