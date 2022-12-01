@@ -49,13 +49,14 @@ class ETL:
         self.df_return = self.df_return.dropna()
 
     def __attach_engines(self):
-        def check(entry):
-            for key, value in dictionary_engines_codes["Sales Code"].items():
-                if value in entry:
-                    return dictionary_engines_codes["Code Description En"][key]
-
-        dictionary_engines_codes = self.__input_df["engines"].loc[:, "Sales Code":"Code Description En"].to_dict()
-        self.df_return["engine"] = [check(entry) for entry in self.df_return["sales_code_array"]]
+        engine_column = []
+        engines = self.__input_df["engines"][["Sales Code", "Code Description En"]]. \
+            set_index("Sales Code"). \
+            to_dict()["Code Description En"]
+        for sc_array in self.df_return["sales_code_array"]:
+            engine = engines[list(set(engines.keys()) & set(sc_array.split(", ")))[0]]
+            engine_column.append(engine)
+        self.df_return["engine"] = engine_column
 
     def __save(self):
         fp = "./data/enhanced_vehicle_data.xlsx"
