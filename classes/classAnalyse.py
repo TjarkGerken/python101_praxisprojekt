@@ -16,6 +16,8 @@ class Analyse:
 
         if not self.start_date or not self.end_date:
             self.df_timeframe_adjusted = dataframe.sort_values(by="production_date")
+            self.start_date = self.df_timeframe_adjusted['production_date'].iloc[1].strftime('%d.%m.%Y')
+            self.end_date = self.df_timeframe_adjusted['production_date'].iloc[-1].strftime('%d.%m.%Y')
         else:
             self.df_timeframe_adjusted = df_slice_timeframe(dataframe, self.start_date, self.end_date).sort_values(
                 by="production_date")
@@ -28,8 +30,8 @@ class Analyse:
         print("---------- Dashboard ----------")
         print(
             f"The timeframe for the analysis is: "
-            f"\n{self.df_timeframe_adjusted['production_date'].iloc[1].strftime('%d.%m.%Y')}"
-            f" til {self.df_timeframe_adjusted['production_date'].iloc[-1].strftime('%d.%m.%Y')}")
+            f"\n{self.start_date}"
+            f" til {self.end_date}")
         print("-------------------------------\n")
 
         if self.query == 1:
@@ -68,12 +70,12 @@ class Analyse:
             self.df_timeframe_adjusted.groupby(by="country").count().sort_values(by=["fin", "country"], ascending=False)
         data_for_plot = sales_grouped_by_year.iloc[[0, 1, 2]]
         data_for_plot.plot(use_index=True, y=["fin"], kind="bar", color="silver")
-        plt.title("Sales by Country (Top Three)")
+        plt.title(f"Sales by Country (Top Three) between {self.start_date} and {self.end_date}")
         plt.xlabel("Country")
         plt.ylabel("# of Sales")
         plt.legend().set_visible(False)
         plt.xticks(rotation=360)
-        plt.savefig(self.save_path + "top_three_countries.png")
+        plt.savefig(self.save_path + str(self.query) + "top_three_countries.png")
         return list(sales_grouped_by_year["fin"].index[0:3])
 
     def grouped_by_year(self) -> pd.DataFrame:
@@ -83,11 +85,11 @@ class Analyse:
         df_grouped_by_year_highest = df_grouped_by_year.sort_values(by="fin")["fin"].index[-1]
 
         df_grouped_by_year.plot(use_index=True, y=["fin"], color="silver")
-        plt.title("Sales by Year")
+        plt.title(f"Sales by Year between {self.start_date} and {self.end_date}")
         plt.xlabel("Year")
         plt.legend().set_visible(False)
         plt.ylabel("# of Sales")
-        plt.savefig(self.save_path + "sales_by_year.png")
+        plt.savefig(self.save_path + str(self.query) + "sales_by_year.png")
         return df_grouped_by_year_highest
 
     def filter_by_engines(self, list_of_engines) -> pd.DataFrame:
@@ -99,8 +101,7 @@ class Analyse:
         plt.ylabel("# of Sales")
         plt.legend().set_visible(False)
         plt.xticks(rotation=360)
-        plt.ylim([0, 30])
-        plt.savefig(self.save_path + "sales_by_engines_filtered.png")
+        plt.savefig(self.save_path + str(self.query) + "sales_by_engines_filtered.png")
         return counted_filtered["fin"].sum()
 
     def first_vehicle(self) -> str:
