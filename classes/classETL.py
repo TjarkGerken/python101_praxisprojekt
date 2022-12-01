@@ -1,6 +1,5 @@
 import datetime as dt
 
-import numpy as np
 import pandas as pd
 
 from classes.classDataLoader import DataLoader
@@ -42,9 +41,10 @@ class ETL:
         self.df_return["production_date"] = pd.to_datetime(self.df_return["production_date"],
                                                            format="%Y-%m-%d %H:%M:%S",
                                                            errors="coerce").dropna()
-        self.df_return = self.df_return[
-            np.logical_and(self.df_return["production_date"] > dt.datetime(year=2010, day=1, month=1),
-                           dt.datetime.now() > self.df_return["production_date"])]
+        self.df_return = self.df_return.loc[
+            (dt.datetime.now() > self.df_return["production_date"]) &
+            (self.df_return["production_date"] > dt.datetime(year=2010, day=1, month=1))
+            ]
         self.df_return = self.df_return[self.df_return["fin"].str.len() == 17]
         self.df_return = self.df_return.dropna()
 
