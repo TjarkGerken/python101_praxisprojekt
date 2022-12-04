@@ -66,7 +66,7 @@ class ETL:
         length_before_removal = len(self.df_return)
         self.df_return = self.df_return[self.df_return["fin"].str.len() == 17]
         if self.__report:
-            print(f"Removed {(length_before_removal - len(self.df_return))} Entries with a wrong fin length.")
+            print(f"Entries removed with a wrong VIN Length: {(length_before_removal - len(self.df_return))}")
 
     def __dropna(self):
         length_before_removal = len(self.df_return)
